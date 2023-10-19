@@ -1,0 +1,68 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: <?app-name> - Computation and API
+
+Globals:
+  Function:
+    Runtime: java17
+    Tracing: Active
+    Architectures:
+      - x86_64
+    Timeout: 600
+    MemorySize: 1024
+    Environment:
+      Variables:
+        DATABASE_URL: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/url}}'
+        DATABASE_USERNAME: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/username}}'
+        DATABASE_PASSWORD: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/password}}'
+
+Parameters:
+  Env:
+    Type: String
+
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: school.hei.poja.LambdaHandler::handleRequest
+      AutoPublishAlias: live
+      SnapStart:
+        ApplyOn: PublishedVersions
+      VpcConfig:
+        SecurityGroupIds:
+          - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
+        SubnetIds:
+          - !Sub '{{resolve:ssm:<?ssm-param-name-subnet1-id>}}'
+          - !Sub '{{resolve:ssm:<?ssm-param-name-subnet2-id>}}'
+      Events:
+        ApiCall:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
+
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+  ApplicationInsightsMonitoring:
+    Type: AWS::ApplicationInsights::Application
+    Properties:
+      ResourceGroupName: !Ref ApplicationResourceGroup
+      AutoConfigurationEnabled: 'true'
+
+  ApiUrlSSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join [ '', [ /<?app-name>/, !Ref Env, /api/url ] ]
+      Type: String
+      Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod"
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway endpoint URL
+    Value: !GetAtt ApiUrlSSM.Value

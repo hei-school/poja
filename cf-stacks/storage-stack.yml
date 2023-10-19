@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: <?app-name> - Storage
+
+Parameters:
+  Env:
+    Type: String
+  DBName:
+    Type: String
+    Default: <?app-name>-rds
+
+Resources:
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: !Join [ '', [ Subnet group for <?app-name> , !Ref Env ] ]
+      DBSubnetGroupName: !Join [ '', [ <?app-name>-, !Ref Env, -subnet-group ] ]
+      SubnetIds:
+        - !Sub '{{resolve:ssm:<?ssm-param-name-subnet1-id>}}'
+        - !Sub '{{resolve:ssm:<?ssm-param-name-subnet2-id>}}'
+
+  DatabaseCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      BackupRetentionPeriod: 35
+      DatabaseName: !Join [ '', !Split [ '-', !Ref DBName ] ]
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      DeletionProtection: true
+      Engine: aurora-postgresql
+      EngineMode: serverless
+      EngineVersion: 13.9 #Only postgresql version 13.9 and 11.9 supports Aurora serverless v1
+      MasterUsername: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/username}}'
+      MasterUserPassword: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/password}}'
+      VpcSecurityGroupIds:
+        - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
+
+  DatabaseClusterSSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join [ '', [ /<?app-name>/, !Ref Env, /db/url ] ]
+      Type: String
+      Value:
+        Fn::Join:
+          - ''
+          - - jdbc:postgresql://
+            - Fn::GetAtt:
+                - DatabaseCluster
+                - Endpoint.Address
+            - ':'
+            - Fn::GetAtt:
+                - DatabaseCluster
+                - Endpoint.Port
+            - '/'
+            - !Join [ '', !Split [ '-', !Ref DBName ] ]
+
+  DatabaseClusterIdentifierSSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join [ '', [ /<?app-name>/, !Ref Env, /db/identifier ] ]
+      Type: String
+      Value: !GetAtt DatabaseCluster.Endpoint.Address
+
+Outputs:
+  DatabaseClusterSSM:
+    Value: !GetAtt DatabaseClusterSSM.Value
