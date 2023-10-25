@@ -7,6 +7,13 @@ Parameters:
   DBName:
     Type: String
     Default: <?app-name>-rds
+  ProdDbClusterTimeout:
+    Type: Number
+
+Conditions:
+  IsProdEnv: !Equals
+    - !Ref Env
+    - 'prod'
 
 Resources:
   DBSubnetGroup:
@@ -32,6 +39,10 @@ Resources:
       MasterUserPassword: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/password}}'
       VpcSecurityGroupIds:
         - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
+      ScalingConfiguration:
+        SecondsUntilAutoPause:
+          !If [ IsProdEnv,  !Ref ProdDbClusterTimeout, 300 ]
+
 
   DatabaseClusterSSM:
     Type: AWS::SSM::Parameter

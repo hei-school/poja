@@ -22,8 +22,9 @@ Create first:
 
 ## Usage
 1. Clone this repository.
-2. Run `$ ./poja.sh poja-ping eu-west-3 /poja/sg/id /poja/subnet/public1/id /poja/subnet/public2/id` if `poja-ping` is the name of your application, and `eu-west-3` the AWS region you want to deploy into, and the three remaining arguments the SSM parameters where you saved the id of your security group and subnets. We recommend prefixing your poja application names with `poja-`.
+2. Run `$ ./poja.sh poja-ping eu-west-3 /poja/sg/id /poja/subnet/public1/id /poja/subnet/public2/id 900` if `poja-ping` is the name of your application, and `eu-west-3` the AWS region you want to deploy into, the three remaining arguments the SSM parameters where you saved the id of your security group and subnets. We recommend prefixing your poja application names with `poja-`.
 3. Commit changes and push them to Github.
-4. Define the Github secrets for deploying into your AWS prod and preprod accounts: `PROD_AWS_ACCESS_KEY_ID`, `PROD_AWS_SECRET_ACCESS_KEY`, `PREPROD_AWS_ACCESS_KEY_ID`, and `PREPROD_AWS_SECRET_ACCESS_KEY`. If you use the same account for prod and preprod, just give the same values to the prod and preprod variables.
-5. Run the `CD storage` action. This creates the serverless Postgres. The database URL is printed in the Github console.
-6. Run the `CD compute` action. This creates the serverless Spring Boot. The API URL is printed in the Github console.
+4. Define the Github variables for setting the database cluster scaling down timeout for the prod environment: `PROD_DB_CLUSTER_TIMEOUT`. Note that its value must be between 300 seconds (5 minutes) and 86_400 seconds (1 day).
+5. Define the Github secrets for deploying into your AWS prod and preprod accounts: `PROD_AWS_ACCESS_KEY_ID`, `PROD_AWS_SECRET_ACCESS_KEY`, `PREPROD_AWS_ACCESS_KEY_ID`, and `PREPROD_AWS_SECRET_ACCESS_KEY`. If you use the same account for prod and preprod, just give the same values to the prod and preprod variables.
+6. Run the `CD storage` action. This creates the serverless Postgres. The database URL is printed in the Github console.
+7. Run the `CD compute` action. This creates the serverless Spring Boot. The API URL is printed in the Github console.
