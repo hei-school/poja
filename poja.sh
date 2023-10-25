@@ -13,3 +13,5 @@ find ./ -type f -exec sed -i '' -e "s/<?ssm-param-name-subnet1-id>/$ESCAPED_SUBN
 
 ESCAPED_SUBNET2_ID=$(printf '%s\n' "$5" | sed -e 's/\//\\&/g');
 find ./ -type f -exec sed -i '' -e "s/<?ssm-param-name-subnet2-id>/$ESCAPED_SUBNET2_ID/g" {} \;
+
+find ./ -type f -exec sed -i '' -e "s/<?db-timeout>/$6/g" {} \;

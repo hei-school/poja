@@ -22,7 +22,7 @@ Create first:
 
 ## Usage
 1. Clone this repository.
-2. Run `$ ./poja.sh poja-ping eu-west-3 /poja/sg/id /poja/subnet/public1/id /poja/subnet/public2/id` if `poja-ping` is the name of your application, and `eu-west-3` the AWS region you want to deploy into, and the three remaining arguments the SSM parameters where you saved the id of your security group and subnets. We recommend prefixing your poja application names with `poja-`.
+2. Run `$ ./poja.sh poja-ping eu-west-3 /poja/sg/id /poja/subnet/public1/id /poja/subnet/public2/id 900` if `poja-ping` is the name of your application, and `eu-west-3` the AWS region you want to deploy into, the three following arguments the SSM parameters where you saved the id of your security group and subnets, and the last one is an integer to define the amount of time to wait before scaling down the database cluster to 0 (value must between 300 and 86,400). We recommend prefixing your poja application names with `poja-`.
 3. Commit changes and push them to Github.
 4. Define the Github secrets for deploying into your AWS prod and preprod accounts: `PROD_AWS_ACCESS_KEY_ID`, `PROD_AWS_SECRET_ACCESS_KEY`, `PREPROD_AWS_ACCESS_KEY_ID`, and `PREPROD_AWS_SECRET_ACCESS_KEY`. If you use the same account for prod and preprod, just give the same values to the prod and preprod variables.
 5. Run the `CD storage` action. This creates the serverless Postgres. The database URL is printed in the Github console.

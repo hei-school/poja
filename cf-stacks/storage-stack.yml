@@ -32,6 +32,9 @@ Resources:
       MasterUserPassword: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/password}}'
       VpcSecurityGroupIds:
         - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
+      ScalingConfiguration:
+        SecondsUntilAutoPause: <?db-timeout> # the amount of time to wait before scaling down the DBCluster to 0 (between 300 and 86,400 seconds)
+
 
   DatabaseClusterSSM:
     Type: AWS::SSM::Parameter
