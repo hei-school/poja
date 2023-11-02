@@ -47,5 +47,5 @@ jobs:
           capabilities: CAPABILITY_NAMED_IAM
           no-fail-on-empty-changeset: "1"
           parameter-overrides:
-            "Env=${{ github.ref_name }}
+            "Env=${{ github.ref_name }},
             ProdDbClusterTimeout=${{ vars.PROD_DB_CLUSTER_TIMEOUT }}"
