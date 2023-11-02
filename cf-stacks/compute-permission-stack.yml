@@ -17,13 +17,7 @@ Resources:
               Service: lambda.amazonaws.com
             Action: 'sts:AssumeRole'
       ManagedPolicyArns:
-        - 'arn:aws:iam::aws:policy/AmazonEC2FullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonSQSFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess'
-        - 'arn:aws:iam::aws:policy/AmazonCognitoPowerUser'
-        - 'arn:aws:iam::aws:policy/AmazonSESFullAccess'
-        - 'arn:aws:iam::aws:policy/CloudWatchFullAccess'
+        - 'arn:aws:iam::aws:policy/AdministratorAccess'
 
   ExecutionRoleArnSSM:
     Type: AWS::SSM::Parameter

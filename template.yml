@@ -49,6 +49,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: school.hei.poja.MailboxEventHandler::handleRequest
+      Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
       Events:
         GetFeatures:
           Type: SQS
