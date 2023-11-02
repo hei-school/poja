@@ -12,13 +12,14 @@ The moment you push in one of these branches, CI/CD will be triggered.
 ## Requirements
 
 Create first:
-- Two subnets. They can be both public or both private or a mix of both, as long as they can communicate between each other. Reference their id in SSM under any name you want.
+- Two subnets. They MUST be private, and access Internet through a NAT Gateway. Reference their id in SSM under any name you want.
 - A security group that allows HTTP and Postgres traffic. Put its id in SSM under any name you want.
 - Two entries in SSM that stores the credentials of the database that will be created. The name MUST be as follows: `/<?app-name>/<?env>/db/username` and `/<?app-name>/<?env>/db/password` where <?app-name>` is any name you want and `<?app-name>` is either `prod` or `preprod`.
 
 > **Warning**
-> In case you provide private subnets, remind that the associated NAT Gateway for accessing Internet is __not__ serverless.
+> Remind that the NAT Gateway associated to the subnets is __not__ serverless.
 > Whether your POJA is used or not, the NAT Gateway will generate a fixed lower cost of around $35 per month.
+> If you host 100 POJA in the same VPC, that makes $0.35 the fixed cost per POJA.
 
 ## Usage
 1. Invoke the [POJA CLI](https://github.com/hei-school/poja-cli). We recommend prefixing your poja application names with `poja-`.
