@@ -29,9 +29,9 @@ Resources:
       CodeUri: .
       Handler: school.hei.poja.ApiEventHandler::handleRequest
       Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
-      # AutoPublishAlias: live
-      # SnapStart:
-      #  ApplyOn: PublishedVersions
+      AutoPublishAlias: live
+      SnapStart:
+        ApplyOn: PublishedVersions
       VpcConfig:
         SecurityGroupIds:
           - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
