@@ -1,12 +1,12 @@
 package school.hei.poja.endpoint.rest.controller;
 
+import school.hei.poja.FacadeTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import school.hei.poja.PostgresTest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class HealthControllerTest extends PostgresTest {
+class HealthControllerTest extends FacadeTest {
 
   @Autowired
   HealthController healthController;

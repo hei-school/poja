@@ -71,7 +71,13 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.postgresql:postgresql'
 
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
     implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot3:2.0.0-M2'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.3'
+    implementation 'software.amazon.awssdk:sqs:2.21.7'
+    implementation 'software.amazon.awssdk:eventbridge:2.21.7'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

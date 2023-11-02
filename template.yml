@@ -15,17 +15,20 @@ Globals:
         DATABASE_URL: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/url}}'
         DATABASE_USERNAME: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/username}}'
         DATABASE_PASSWORD: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/password}}'
+        AWS_SQS_QUEUE_URL: !Sub '{{resolve:ssm:/<?app-name>/${Env}/sqs/mailbox-queue-url}}'
+        AWS_EVENTBRIDGE_BUS: !Sub '{{resolve:ssm:/<?app-name>/${Env}/eventbridge/bus-name}}'
 
 Parameters:
   Env:
     Type: String
 
 Resources:
-  Function:
+  ApiFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: .
-      Handler: school.hei.poja.LambdaHandler::handleRequest
+      Handler: school.hei.poja.ApiEventHandler::handleRequest
+      Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
       AutoPublishAlias: live
       SnapStart:
         ApplyOn: PublishedVersions
@@ -41,6 +44,17 @@ Resources:
           Properties:
             Path: /{proxy+}
             Method: ANY
+
+  MailboxEventFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: school.hei.poja.MailboxEventHandler::handleRequest
+      Events:
+        GetFeatures:
+          Type: SQS
+          Properties:
+            Queue: !Sub '{{resolve:ssm:/<?app-name>/${Env}/sqs/mailbox-queue-arn}}'
+            BatchSize: 1
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
