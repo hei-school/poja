@@ -1,33 +1,22 @@
 package school.hei.poja;
 
-import school.hei.poja.endpoint.event.EventConf;
-import school.hei.poja.endpoint.event.EventConsumer;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
-
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.util.Collections;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import school.hei.poja.endpoint.event.EventConf;
+import school.hei.poja.endpoint.event.EventConsumer;
 import software.amazon.awssdk.services.sqs.SqsClient;
+
+import java.util.List;
 
 import static java.util.Collections.singletonMap;
 import static school.hei.poja.endpoint.event.EventConsumer.toAcknowledgeableTypedEvent;
 
 @Slf4j
 public class MailboxEventHandler implements RequestHandler<SQSEvent, String> {
-
-  private static int anAvailableRandomPort() {
-    try(ServerSocket serverSocket = new ServerSocket(0)) {
-      return serverSocket.getLocalPort();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
 
   @Override
   public String handleRequest(SQSEvent event, Context context) {
@@ -48,7 +37,7 @@ public class MailboxEventHandler implements RequestHandler<SQSEvent, String> {
 
   private ConfigurableApplicationContext applicationContext(String... args) {
     SpringApplication application = new SpringApplication(MailboxEventHandler.class);
-    application.setDefaultProperties(singletonMap("server.port", anAvailableRandomPort()));
+    application.setDefaultProperties(singletonMap("spring.main.web-application-type", "none"));
     return application.run(args);
   }
 }
