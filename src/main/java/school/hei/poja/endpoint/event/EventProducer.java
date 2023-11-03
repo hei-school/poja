@@ -1,17 +1,17 @@
 package school.hei.poja.endpoint.event;
 
-import school.hei.poja.endpoint.event.model.TypedEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import school.hei.poja.PojaGenerated;
+import school.hei.poja.endpoint.event.model.TypedEvent;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.eventbridge.EventBridgeClient;
 import software.amazon.awssdk.services.eventbridge.model.PutEventsRequest;
@@ -19,6 +19,7 @@ import software.amazon.awssdk.services.eventbridge.model.PutEventsRequestEntry;
 import software.amazon.awssdk.services.eventbridge.model.PutEventsResponse;
 import software.amazon.awssdk.services.eventbridge.model.PutEventsResultEntry;
 
+@PojaGenerated
 @Component
 @Slf4j
 public class EventProducer implements Consumer<List<TypedEvent>> {
@@ -27,9 +28,10 @@ public class EventProducer implements Consumer<List<TypedEvent>> {
   private final String eventBusName;
   private final EventBridgeClient eventBridgeClient;
 
-  public EventProducer(ObjectMapper om,
-                       @Value("${aws.eventBridge.bus}") String eventBusName,
-                       EventBridgeClient eventBridgeClient) {
+  public EventProducer(
+      ObjectMapper om,
+      @Value("${aws.eventBridge.bus}") String eventBusName,
+      EventBridgeClient eventBridgeClient) {
     this.om = om;
     this.eventBusName = eventBusName;
     this.eventBridgeClient = eventBridgeClient;
@@ -75,8 +77,7 @@ public class EventProducer implements Consumer<List<TypedEvent>> {
 
   private void checkPayload(List<TypedEvent> events) {
     if (!isPayloadValid(events)) {
-      throw new RuntimeException(
-          "Request entries must be <= " + Conf.MAX_PUT_EVENT_ENTRIES);
+      throw new RuntimeException("Request entries must be <= " + Conf.MAX_PUT_EVENT_ENTRIES);
     }
   }
 

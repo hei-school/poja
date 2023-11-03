@@ -1,10 +1,12 @@
 package school.hei.poja.endpoint.event.model;
 
-import school.hei.poja.endpoint.event.gen.UuidCreated;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
+import school.hei.poja.PojaGenerated;
+import school.hei.poja.endpoint.event.gen.UuidCreated;
 
+@PojaGenerated
 @AllArgsConstructor
 @ToString
 public class TypedUuidCreated implements TypedEvent {

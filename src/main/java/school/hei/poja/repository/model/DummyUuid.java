@@ -10,6 +10,6 @@ import school.hei.poja.PojaGenerated;
 @Entity
 @Getter
 @Setter
-public class Dummy {
+public class DummyUuid {
   @Id private String id;
 }

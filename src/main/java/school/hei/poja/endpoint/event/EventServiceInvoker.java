@@ -1,15 +1,16 @@
 package school.hei.poja.endpoint.event;
 
+import java.io.Serializable;
+import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import school.hei.poja.PojaGenerated;
 import school.hei.poja.endpoint.event.gen.UuidCreated;
 import school.hei.poja.endpoint.event.model.TypedEvent;
-import school.hei.poja.service.UuidCreatedService;
+import school.hei.poja.service.event.UuidCreatedService;
 
-import java.io.Serializable;
-import java.util.function.Consumer;
-
+@PojaGenerated
 @AllArgsConstructor
 @Component
 @Slf4j

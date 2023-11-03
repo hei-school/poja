@@ -1,8 +1,5 @@
 package school.hei.poja.endpoint.event;
 
-import school.hei.poja.endpoint.event.gen.UuidCreated;
-import school.hei.poja.endpoint.event.model.TypedEvent;
-import school.hei.poja.endpoint.event.model.TypedUuidCreated;
 import com.amazonaws.services.lambda.runtime.events.SQSEvent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,9 +12,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import school.hei.poja.PojaGenerated;
+import school.hei.poja.endpoint.event.gen.UuidCreated;
+import school.hei.poja.endpoint.event.model.TypedEvent;
+import school.hei.poja.endpoint.event.model.TypedUuidCreated;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
 
+@PojaGenerated
 @Component
 @Slf4j
 public class EventConsumer implements Consumer<List<EventConsumer.AcknowledgeableTypedEvent>> {
@@ -42,12 +44,15 @@ public class EventConsumer implements Consumer<List<EventConsumer.Acknowledgeabl
         log.error("Message could not be unmarshalled, message : %s \n", message);
         continue;
       }
-      AcknowledgeableTypedEvent event = new AcknowledgeableTypedEvent(
-          typedEvent,
-          () -> sqsClient.deleteMessage(DeleteMessageRequest.builder()
-              .queueUrl(eventConf.getSqsQueue())
-              .receiptHandle(message.getReceiptHandle())
-              .build()));
+      AcknowledgeableTypedEvent event =
+          new AcknowledgeableTypedEvent(
+              typedEvent,
+              () ->
+                  sqsClient.deleteMessage(
+                      DeleteMessageRequest.builder()
+                          .queueUrl(eventConf.getSqsQueue())
+                          .receiptHandle(message.getReceiptHandle())
+                          .build()));
       res.add(event);
     }
     return res;
@@ -56,8 +61,7 @@ public class EventConsumer implements Consumer<List<EventConsumer.Acknowledgeabl
   private static TypedEvent toTypedEvent(SQSEvent.SQSMessage message)
       throws JsonProcessingException {
     TypedEvent typedEvent;
-    TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {
-    };
+    TypeReference<Map<String, Object>> typeRef = new TypeReference<>() {};
     Map<String, Object> body = om.readValue(message.getBody(), typeRef);
     String typeName = body.get(DETAIL_TYPE_PROPERTY).toString();
     if (UuidCreated.class.getTypeName().equals(typeName)) {
@@ -79,8 +83,7 @@ public class EventConsumer implements Consumer<List<EventConsumer.Acknowledgeabl
 
   @AllArgsConstructor
   public static class AcknowledgeableTypedEvent {
-    @Getter
-    private final TypedEvent typedEvent;
+    @Getter private final TypedEvent typedEvent;
     private final Runnable acknowledger;
 
     public void ack() {

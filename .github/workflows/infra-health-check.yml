@@ -1,4 +1,4 @@
-name: Health check (prod)
+name: Infra health check (prod)
 on:
   schedule:
     - cron: '0 0 * * *'
@@ -14,7 +14,7 @@ env:
   AWS_REGION: <?aws-region>
 
 jobs:
-  dummy-table:
+  check-sync-stack:
     timeout-minutes: 300
     runs-on: ubuntu-latest
 
@@ -36,7 +36,7 @@ jobs:
           export API_URL=`echo $API_URL_SSM | jq -r '.Parameter.Value'`
           curl --fail "$API_URL"/dummy-table
 
-  uuid-created:
+  check-async-stack:
     timeout-minutes: 300
     runs-on: ubuntu-latest
 
@@ -56,4 +56,4 @@ jobs:
           export API_URL_SSM="`aws ssm get-parameter --name /<?app-name>/${{ github.ref_name }}/api/url`"
           sudo apt-get install jq
           export API_URL=`echo $API_URL_SSM | jq -r '.Parameter.Value'`
-          curl --fail "$API_URL"/uuid-created
+          curl --max-time 60 --fail "$API_URL"/uuid-created

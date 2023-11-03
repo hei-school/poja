@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import school.hei.poja.PojaGenerated;
 
+@PojaGenerated
 @Generated("EventBridge")
 @NoArgsConstructor
 @AllArgsConstructor

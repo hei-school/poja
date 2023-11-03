@@ -12,7 +12,6 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.3'
 
     id 'jacoco'
-    id 'checkstyle'
 }
 
 java {
@@ -32,36 +31,20 @@ repositories {
     mavenCentral()
 }
 
-apply plugin: 'checkstyle'
-checkstyle {
-    toolVersion '10.3.3'
-    configFile file('config/checkstyle/google_checks_custom.xml')
-}
-
-checkstyleMain {
-    source = 'src/main/java'
-}
-
-checkstyleTest {
-    source = 'src/test/java'
-}
-
-tasks.withType(Checkstyle) {
-    reports {
-        xml.destination file("${projectDir}/build/reports/checkstyle/checkstyle.xml")
-    }
-}
-
 test {
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     useJUnitPlatform()
-    finalizedBy jacocoTestReport
+    finalizedBy jacocoTestCoverageVerification
 }
 
-jacocoTestReport {
-    dependsOn test
-    reports {
-        xml.required = true
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = "LINE"
+                minimum = 0.8
+            }
+        }
     }
 }
 

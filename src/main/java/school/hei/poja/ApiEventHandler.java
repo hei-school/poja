@@ -6,18 +6,17 @@ import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+@PojaGenerated
 public class ApiEventHandler implements RequestStreamHandler {
   private static final SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
 
   static {
     try {
-      handler =
-          SpringBootLambdaContainerHandler.getAwsProxyHandler(PojaApplication.class);
+      handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(PojaApplication.class);
     } catch (ContainerInitializationException e) {
       throw new RuntimeException("Initialization of Spring Boot Application failed", e);
     }

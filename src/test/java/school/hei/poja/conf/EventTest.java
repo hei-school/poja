@@ -1,4 +1,4 @@
-package school.hei.poja;
+package school.hei.poja.conf;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 
