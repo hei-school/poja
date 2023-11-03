@@ -11,8 +11,8 @@ import school.hei.poja.endpoint.event.EventConsumer;
 import software.amazon.awssdk.services.sqs.SqsClient;
 
 import java.util.List;
+import java.util.Map;
 
-import static java.util.Collections.singletonMap;
 import static school.hei.poja.endpoint.event.EventConsumer.toAcknowledgeableTypedEvent;
 
 @Slf4j
@@ -20,9 +20,9 @@ public class MailboxEventHandler implements RequestHandler<SQSEvent, String> {
 
   @Override
   public String handleRequest(SQSEvent event, Context context) {
-    log.info("Following received events : {}\n", event);
+    log.info("Received: event={}, awsReqId={}", event, context.getAwsRequestId());
     List<SQSEvent.SQSMessage> messages = event.getRecords();
-    log.info("Following received messages : {}\n", messages);
+    log.info("SQS messages: {}", messages);
 
     ConfigurableApplicationContext applicationContext = applicationContext();
     EventConsumer eventConsumer = applicationContext.getBean(EventConsumer.class);
@@ -32,12 +32,14 @@ public class MailboxEventHandler implements RequestHandler<SQSEvent, String> {
     eventConsumer.accept(toAcknowledgeableTypedEvent(eventConf, sqsClient, messages));
 
     applicationContext.close();
-    return "{message: ok}";
+    return "ok";
   }
 
   private ConfigurableApplicationContext applicationContext(String... args) {
-    SpringApplication application = new SpringApplication(MailboxEventHandler.class);
-    application.setDefaultProperties(singletonMap("spring.main.web-application-type", "none"));
+    SpringApplication application = new SpringApplication(PojaApplication.class);
+    application.setDefaultProperties(Map.of(
+        "spring.main.web-application-type", "none",
+        "spring.flyway.enabled", "false"));
     return application.run(args);
   }
 }

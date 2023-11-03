@@ -4,12 +4,22 @@ Description: <?app-name> - Computation and API
 
 Globals:
   Function:
+    CodeUri: .
     Runtime: java17
     Tracing: Active
     Architectures:
       - x86_64
     Timeout: 600
     MemorySize: 1024
+    AutoPublishAlias: live
+    SnapStart:
+      ApplyOn: PublishedVersions
+    VpcConfig:
+      SecurityGroupIds:
+        - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
+      SubnetIds:
+        - !Sub '{{resolve:ssm:<?ssm-param-name-subnet1-id>}}'
+        - !Sub '{{resolve:ssm:<?ssm-param-name-subnet2-id>}}'
     Environment:
       Variables:
         DATABASE_URL: !Sub '{{resolve:ssm:/<?app-name>/${Env}/db/url}}'
@@ -26,18 +36,8 @@ Resources:
   ApiFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: .
       Handler: school.hei.poja.ApiEventHandler::handleRequest
       Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
-      AutoPublishAlias: live
-      SnapStart:
-        ApplyOn: PublishedVersions
-      VpcConfig:
-        SecurityGroupIds:
-          - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
-        SubnetIds:
-          - !Sub '{{resolve:ssm:<?ssm-param-name-subnet1-id>}}'
-          - !Sub '{{resolve:ssm:<?ssm-param-name-subnet2-id>}}'
       Events:
         ApiCall:
           Type: Api
@@ -51,11 +51,11 @@ Resources:
       Handler: school.hei.poja.MailboxEventHandler::handleRequest
       Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
       Events:
-        GetFeatures:
+        AllEvents:
           Type: SQS
           Properties:
             Queue: !Sub '{{resolve:ssm:/<?app-name>/${Env}/sqs/mailbox-queue-arn}}'
-            BatchSize: 1
+            BatchSize: 5
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
