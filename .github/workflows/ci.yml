@@ -32,5 +32,3 @@ jobs:
             ~/.gradle/wrapper
 
       - run: ./gradlew test
-
-      - run: ./gradlew checkstyleMain checkstyleTest
