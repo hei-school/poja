@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import school.hei.poja.PojaGenerated;
 import school.hei.poja.endpoint.event.EventProducer;
 import school.hei.poja.endpoint.event.gen.UuidCreated;
-import school.hei.poja.endpoint.event.model.TypedUuidCreated;
 import school.hei.poja.repository.DummyRepository;
 import school.hei.poja.repository.DummyUuidRepository;
 import school.hei.poja.repository.model.Dummy;
@@ -37,7 +36,7 @@ public class HealthController {
   @GetMapping("/uuid-created")
   public String uuidCreated() throws InterruptedException {
     var randomUuid = randomUUID().toString();
-    var event = new TypedUuidCreated(new UuidCreated().toBuilder().uuid(randomUuid).build());
+    var event = new UuidCreated().toBuilder().uuid(randomUuid).build();
 
     eventProducer.accept(List.of(event));
 

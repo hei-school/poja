@@ -62,6 +62,8 @@ dependencies {
     implementation 'software.amazon.awssdk:sqs:2.21.7'
     implementation 'software.amazon.awssdk:eventbridge:2.21.7'
 
+    implementation 'org.reflections:reflections:0.10.2'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
