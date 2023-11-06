@@ -9,6 +9,13 @@ Thus, bring your own AWS.
 poja is to be used à-la Gitflow but with only two branches/environments: prod and preprod.
 The moment you push in one of these branches, CI/CD will be triggered.
 
+## Code Quality
+
+* A formatting script is embedded with POJA. Just run `./format.sh` and your whole code will be formatted using Google Java Format. To cite the GJF team: "There is no configurability as to the formatter's algorithm for formatting. This is a deliberate design decision to unify our code formatting on a single format."
+
+* CI will fail whenever code coverage is below 80%. POJA code are not taken into account in the coverage computation, as they are marked by the annotation `@PojaGenerated`. More generally, any class annotated with `@...Generated` will be excluded from coverage computation.
+
+
 ## Requirements
 
 Create first:
