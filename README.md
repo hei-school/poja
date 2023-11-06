@@ -15,6 +15,19 @@ The moment you push in one of these branches, CI/CD will be triggered.
 
 * CI will fail whenever code coverage is below 80%. POJA code are not taken into account in the coverage computation, as they are marked by the annotation `@PojaGenerated`. More generally, any class annotated with `@...Generated` will be excluded from coverage computation.
 
+## Asynchronous Tasks
+
+POJA comes with a fully serverless asynchronous stack based on AWS Eventbrige events and on AWS SQS.
+Creating a new asynchronous treatment is as simple as generating the corresponding event in `endpoint.event` using the code generation capabilities of Eventbrige,
+say [UserCreated](https://github.com/hei-school/poja-base/blob/prod/src/main/java/com/company/base/endpoint/event/gen/UuidCreated.java),
+then creating the service that will consume it by adding the `Service` suffix to the event name in `service.event`,
+that is [UserCreatedService](https://github.com/hei-school/poja-base/blob/prod/src/main/java/com/company/base/service/event/UuidCreatedService.java) for the given example.
+
+The link between the event and its consumer service is automatically done by POJA through means of reflection.
+Note that unlike the synchronous stack, the asynchronous stack does _not_ benefit from SnapStart.
+Hence it requires to launch a whole Spring Boot on each cold start.
+We consider this acceptable as the treatment is asynchronous anyway.
+
 
 ## Requirements
 
