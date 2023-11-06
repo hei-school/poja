@@ -18,7 +18,11 @@ POJA stands for POstgres JAva as it only supported the generation of a simple Ja
 
 ## Usage
 
-Run a POJA stack in minutes using the [POJA CLI](https://github.com/hei-school/poja-cli).
+Create a new POJA stack in minutes using the [POJA CLI](https://github.com/hei-school/poja-cli).
+Update an existing POJA stack in minutes using the same CLI!
+
+Say good bye to the days where you had hard times launching new Java/Github/AWS stacks,
+and even harder times trying to apply a fix or a feature you developped on a stack that you want to apply to other stacks!
 
 ## Features
 
