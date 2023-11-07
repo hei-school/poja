@@ -22,7 +22,7 @@ Globals:
         - !Sub '{{resolve:ssm:<?ssm-param-name-subnet2-id>}}'
     Environment:
       Variables:
-<?postgres-env-vars>
+        <?postgres-env-vars>
         AWS_SQS_QUEUE_URL: !Sub '{{resolve:ssm:/<?app-name>/${Env}/sqs/mailbox-queue-url}}'
         AWS_EVENTBRIDGE_BUS: !Sub '{{resolve:ssm:/<?app-name>/${Env}/eventbridge/bus-name}}'
 
