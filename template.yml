@@ -25,6 +25,7 @@ Globals:
         <?postgres-env-vars>
         AWS_SQS_QUEUE_URL: !Sub '{{resolve:ssm:/<?app-name>/${Env}/sqs/mailbox-queue-url}}'
         AWS_EVENTBRIDGE_BUS: !Sub '{{resolve:ssm:/<?app-name>/${Env}/eventbridge/bus-name}}'
+<?java-env-vars>
 
 Parameters:
   Env:
