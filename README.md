@@ -3,8 +3,8 @@
 **Your Java Infrawork. What is infrawork? It's like framework, but extended to the infrastructure running it!**
 
 The Java framework is Spring Boot. The infrastructure on which it runs is AWS.
-In the same way Spring Boot enforces a specific way of writing Java applications,
-POJA enforces a specific way of running Spring Boot on AWS.
+In the same way Spring Boot enforces a specific style for writing Java applications,
+POJA enforces a specific style for running Spring Boot on AWS.
 
 In particular, the whole stack is fully serverless: no activity then no payment.
 Spring Boot itself is run on Lambda functions, with no cold start problem thanks to SnapStart.
@@ -12,17 +12,18 @@ The persistence is backed by Aurora Postgres v1, with no cold start problem if n
 An asynchronous stack is also embedded using EventBrige and SQS.
 
 Additionally, POJA generates Github Actions for CI/CD, for health check, for formatting, for releases and for periodic database snapshoting.
-More generally, POJA provides a way to operate the Spring Boot framework on AWS on a large scale, at the highest level of quality, and yet very simply through a simple CLI.
+More generally, POJA provides a way to operate the Spring Boot framework on AWS on a large scale, at the highest level of quality,
+and yet very simply through a [CLI](https://github.com/hei-school/poja-cli).
 
-POJA stands for POstgres JAva as it only supported the generation of a simple Java Spring Boot connected to a POstgres in the beginning.
+POJA stands for POstgres JAva as, in the beginning, it only supported the generation of a Java Spring Boot connected to a POstgres.
 
 ## Usage
 
 Create a new POJA stack in minutes using the [POJA CLI](https://github.com/hei-school/poja-cli).
-Update an existing POJA stack in minutes using the same CLI!
+Update an existing POJA stack in seconds using the same CLI!
 
 Say good bye to the days where you had hard times launching new Java/Github/AWS stacks,
-and even harder times trying to apply a fix or a feature you developped on a stack that you want to apply to other stacks!
+and even harder times trying to apply infrastructure fixes or infrastructure features you developped on a stack that you want to apply on other stacks!
 
 ## Features
 
@@ -33,7 +34,7 @@ The moment you push in one of these branches, CI/CD will be triggered.
 
 ### Code Quality
 
-* A formatting script is embedded with POJA. Just run `./format.sh` and your whole code will be formatted using Google Java Format. To cite the GJF team: "There is no configurability as to the formatter's algorithm for formatting. This is a deliberate design decision to unify our code formatting on a single format."
+* A formatting script is embedded with POJA. Just run `./format.sh` and your whole code will be formatted using Google Java Format. To quote the GJF team: "There is no configurability as to the formatter's algorithm for formatting. This is a deliberate design decision to unify our code formatting on a single format."
 
 * CI will fail whenever code coverage is below 80%. POJA code are not taken into account in the coverage computation, as they are marked by the annotation `@PojaGenerated`. More generally, any class annotated with `@...Generated` will be excluded from coverage computation.
 
