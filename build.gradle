@@ -88,6 +88,8 @@ dependencies {
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
     implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.9.3'
+    implementation 'software.amazon.awssdk:aws-query-protocol:2.20.26'
+
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
     implementation 'com.amazonaws:aws-lambda-java-events:3.11.3'
     implementation 'software.amazon.awssdk:sqs:2.21.7'
@@ -103,7 +105,7 @@ dependencies {
     implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:junit-jupiter:1.19.1'
 
     testImplementation 'org.testcontainers:postgresql:1.19.1'
 
