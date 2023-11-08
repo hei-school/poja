@@ -86,6 +86,7 @@ dependencies {
     implementation 'org.postgresql:postgresql'
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.vladmihalcea:hibernate-types-52:1.0.0'
 
     implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.9.3'
     implementation 'software.amazon.awssdk:aws-query-protocol:2.20.26'
@@ -103,6 +104,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+    implementation 'io.swagger:swagger-annotations:1.6.12'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.testcontainers:junit-jupiter:1.19.1'
