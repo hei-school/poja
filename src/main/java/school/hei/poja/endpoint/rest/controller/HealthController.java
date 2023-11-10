@@ -40,7 +40,7 @@ public class HealthController {
 
     eventProducer.accept(List.of(event));
 
-    Thread.sleep(30_000);
+    Thread.sleep(20_000);
     return dummyUuidRepository.findById(randomUuid).map(DummyUuid::getId).orElseThrow();
   }
 }
