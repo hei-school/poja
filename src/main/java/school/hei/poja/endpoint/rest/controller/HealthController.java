@@ -33,7 +33,7 @@ public class HealthController {
     return dummyRepository.findAll();
   }
 
-  @GetMapping("/uuid-created")
+  @GetMapping(value = "/uuid-created", produces = "text/plain")
   public String uuidCreated() throws InterruptedException {
     var randomUuid = randomUUID().toString();
     var event = new UuidCreated().toBuilder().uuid(randomUuid).build();
