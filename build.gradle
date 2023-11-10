@@ -1,3 +1,4 @@
+import org.apache.tools.ant.taskdefs.condition.Os
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
 buildscript {
@@ -61,6 +62,19 @@ task generateJavaClient(type: GenerateTask) {
     generateAliasAsModel = false
     enablePostProcessFile = false
 }
+task generateTsClient(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+    generatorName = "typescript-axios"
+    inputSpec = "$rootDir/doc/api.yml".toString()
+    outputDir = "$buildDir/gen-ts".toString()
+}
+task publishJavaClientToMavenLocal(type: Exec, dependsOn: generateJavaClient) {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)){
+        commandLine './.shell/publish_gen_to_maven_local.bat'
+    } else {
+        commandLine './.shell/publish_gen_to_maven_local.sh'
+    }
+}
+tasks.compileJava.dependsOn publishJavaClientToMavenLocal
 
 test {
     maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
