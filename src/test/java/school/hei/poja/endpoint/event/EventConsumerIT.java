@@ -8,11 +8,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import school.hei.poja.conf.FacadeTest;
+import school.hei.poja.conf.FacadeIT;
 import school.hei.poja.endpoint.event.gen.UuidCreated;
 import school.hei.poja.repository.DummyUuidRepository;
 
-class EventConsumerTest extends FacadeTest {
+class EventConsumerIT extends FacadeIT {
 
   @Autowired EventConsumer subject;
   @Autowired DummyUuidRepository dummyUuidRepository;

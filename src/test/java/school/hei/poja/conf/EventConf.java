@@ -2,7 +2,7 @@ package school.hei.poja.conf;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 
-public class EventTest {
+public class EventConf {
 
   void configureProperties(DynamicPropertyRegistry registry) {
     registry.add("aws.region", () -> "dummy-region");
