@@ -5,7 +5,7 @@ on:
 
 jobs:
   release-version:
-    uses: ./.github/worflows/release-version.yml
+    uses: ./.github/workflows/release-version.yml
     secrets: inherit
 
   publish-to-npm-registry:
