@@ -14,12 +14,7 @@ Globals:
     AutoPublishAlias: live
     SnapStart:
       ApplyOn: PublishedVersions
-    VpcConfig:
-      SecurityGroupIds:
-        - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
-      SubnetIds:
-        - !Sub '{{resolve:ssm:<?ssm-param-name-subnet1-id>}}'
-        - !Sub '{{resolve:ssm:<?ssm-param-name-subnet2-id>}}'
+    <?function-vpc-config>
     Environment:
       Variables:
         ENV: !Ref Env
