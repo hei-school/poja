@@ -7,6 +7,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
@@ -14,6 +15,7 @@ import org.springframework.test.context.DynamicPropertySource;
 @Slf4j
 public class FacadeIT {
 
+  @LocalServerPort private int port;
   private static final PostgresConf POSTGRES_CONF = new PostgresConf();
   private static final EventConf EVENT_CONF = new EventConf();
 
