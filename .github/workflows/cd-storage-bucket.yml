@@ -43,8 +43,8 @@ jobs:
         with:
           name: ${{ github.ref_name }}-bucket-<?app-name>
           template: cf-stacks/storage-bucket-stack.yml
-          tags: "[ { \"Key\": \"app\", \"Value\": \"<?app-name>\" }, { \"Key\": \"env\", \"Value\": \"${{ env.branch_env }}\" } ]"
+          tags: "[ { \"Key\": \"app\", \"Value\": \"<?app-name>\" }, { \"Key\": \"env\", \"Value\": \"${{ github.ref_name }}\" } ]"
           capabilities: CAPABILITY_NAMED_IAM
           no-fail-on-empty-changeset: "1"
           parameter-overrides:
-            "Env=${{ env.branch_env }}"
+            "Env=${{ github.ref_name }}"
