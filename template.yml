@@ -10,7 +10,6 @@ Globals:
     Architectures:
       - x86_64
     Timeout: 600
-    MemorySize: 1024
     AutoPublishAlias: live
     SnapStart:
       ApplyOn: PublishedVersions
@@ -28,10 +27,11 @@ Parameters:
     Type: String
 
 Resources:
-  ApiFunction:
+  FrontalFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: school.hei.poja.ApiEventHandler::handleRequest
+      MemorySize: <?frontal-memory>
       Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
       Events:
         ApiCall:
@@ -40,17 +40,18 @@ Resources:
             Path: /{proxy+}
             Method: ANY
 
-  MailboxEventFunction:
+  WorkerFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: school.hei.poja.MailboxEventHandler::handleRequest
+      MemorySize: <?worker-memory>
       Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
       Events:
         AllEvents:
           Type: SQS
           Properties:
             Queue: !Sub '{{resolve:ssm:/<?app-name>/${Env}/sqs/mailbox-queue-arn}}'
-            BatchSize: 5
+            BatchSize: <?worker-batch>
 
   ApplicationResourceGroup:
     Type: AWS::ResourceGroups::Group
