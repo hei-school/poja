@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: CD storage database
+
+Parameters:
+  Env:
+    Type: String
+
+Resources:
+  Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  BucketSSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join ['', [/<?app-name>/feature-detector/, !Ref Env, /s3/bucket-name]]
+      Type: String
+      Value: !Ref Bucket
+
+Outputs:
+  BucketSSM:
+    Value: !Ref BucketSSM
