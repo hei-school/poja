@@ -41,7 +41,7 @@ jobs:
       - name: Deploy bucket stack
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          name: ${{ env.ref_name }}-bucket-<?app-name>
+          name: ${{ github.ref_name }}-bucket-<?app-name>
           template: cf-stacks/storage-bucket-stack.yml
           tags: "[ { \"Key\": \"app\", \"Value\": \"<?app-name>\" }, { \"Key\": \"env\", \"Value\": \"${{ env.branch_env }}\" } ]"
           capabilities: CAPABILITY_NAMED_IAM
