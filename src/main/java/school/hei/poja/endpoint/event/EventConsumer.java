@@ -72,9 +72,9 @@ public class EventConsumer implements Consumer<List<EventConsumer.Acknowledgeabl
     }
   }
 
-  @AllArgsConstructor
+
   public static class AcknowledgeableTypedEvent {
-    @Getter private final TypedEvent event;
+    private final TypedEvent event;
     private final Runnable acknowledger;
 
     public void ack() {
@@ -82,5 +82,21 @@ public class EventConsumer implements Consumer<List<EventConsumer.Acknowledgeabl
     }
   }
 
-  public record TypedEvent(String typeName, Object payload) {}
+  public class TypedEvent {
+    private final String typeName;
+    private final Object payload;
+
+    public TypedEvent(String typeName, Object payload) {
+      this.typeName = typeName;
+      this.payload = payload;
+    }
+
+    public String getTypeName() {
+      return typeName;
+    }
+
+    public Object getPayload() {
+      return payload;
+    }
+  }
 }
