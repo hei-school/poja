@@ -8,7 +8,14 @@ import school.hei.poja.conf.FacadeIT;
 
 class HealthControllerIT extends FacadeIT {
 
-  @Autowired HealthController healthController;
+  @Autowired
+  HealthController healthController;
+
+  @Test
+  void getEven() {
+    int result = healthController.getEven();
+    assertEquals(0, result % 2, "The number generated is not even");
+  }
 
   @Test
   void ping() {
