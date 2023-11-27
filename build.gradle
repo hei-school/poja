@@ -1,14 +1,6 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
 
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-}
-
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.17'
@@ -17,6 +9,11 @@ plugins {
     id 'org.openapi.generator' version '5.3.0'
 
     id 'jacoco'
+}
+
+repositories {
+<?java-repositories>
+    mavenCentral()
 }
 
 java {
