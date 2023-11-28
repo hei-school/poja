@@ -50,3 +50,9 @@ The link between the event and its consumer service is automatically done by POJ
 Note that unlike the synchronous stack, the asynchronous stack does _not_ benefit from SnapStart.
 Hence it requires to launch a whole Spring Boot on each cold start.
 We consider this acceptable as the treatment is asynchronous anyway.
+
+### Specification and Client Generation
+
+POJA can generate Typescript and Java clients from a given OpenAPI specification.
+
+If you directly started implementing without specifying, first you shouldn't have done that, second POJA fortunately allows you to generate an OpenAPI specification from your implementation thanks to Spring Doc.
