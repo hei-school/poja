@@ -85,4 +85,5 @@ dependencies {
     testImplementation 'org.testcontainers:postgresql:1.19.1'
 
 <?java-deps>
+<?java-deps-springdoc>
 }
