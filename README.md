@@ -55,4 +55,4 @@ We consider this acceptable as the treatment is asynchronous anyway.
 
 POJA can generate Typescript and Java clients from a given OpenAPI specification.
 
-If you directly started implementing without specifying, first you shouldn't have done that, second POJA fortunately allows you to generate an OpenAPI specification from your implementation thanks to Spring Doc.
+If you directly started implementing without specifying, first you shouldn't have done that, second POJA fortunately allows you to generate an OpenAPI specification from your implementation using Spring Doc.
