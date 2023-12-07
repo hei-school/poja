@@ -11,6 +11,11 @@ plugins {
     id 'jacoco'
 }
 
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+
 repositories {
 <?java-repositories>
     mavenCentral()
@@ -66,8 +71,12 @@ dependencies {
 
     implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
     implementation 'com.amazonaws:aws-lambda-java-events:3.11.3'
-    implementation 'software.amazon.awssdk:sqs:2.21.7'
-    implementation 'software.amazon.awssdk:eventbridge:2.21.7'
+    implementation 'software.amazon.awssdk:sqs:2.21.40'
+    implementation 'software.amazon.awssdk:eventbridge:2.21.40'
+    implementation 'software.amazon.awssdk:s3:2.21.40'
+    implementation 'software.amazon.awssdk:core:2.21.40'
+
+    implementation 'org.apache.tika:tika-core:1.18'
 
     implementation 'org.reflections:reflections:0.10.2'
 

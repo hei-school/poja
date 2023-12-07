@@ -2,7 +2,9 @@ package school.hei.poja.conf;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.testcontainers.containers.PostgreSQLContainer;
+import school.hei.poja.PojaGenerated;
 
+@PojaGenerated
 public class PostgresConf {
 
   private final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:13.9");

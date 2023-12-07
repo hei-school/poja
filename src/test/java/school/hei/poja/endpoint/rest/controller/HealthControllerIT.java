@@ -1,11 +1,14 @@
 package school.hei.poja.endpoint.rest.controller;
 
+import static school.hei.poja.endpoint.rest.controller.HealthController.OK;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import school.hei.poja.PojaGenerated;
+import school.hei.poja.conf.FacadeIT;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import school.hei.poja.conf.FacadeIT;
 
+@PojaGenerated
 class HealthControllerIT extends FacadeIT {
 
   @Autowired HealthController healthController;
@@ -17,8 +20,7 @@ class HealthControllerIT extends FacadeIT {
 
   @Test
   void can_read_from_dummy_table() {
-    var dummyTableEntries = healthController.dummyTable();
-    assertEquals(1, dummyTableEntries.size());
-    assertEquals("dummy-table-id-1", dummyTableEntries.get(0).getId());
+    var responseEntity = healthController.dummyTable_should_not_be_empty();
+    assertEquals(OK, responseEntity);
   }
 }
