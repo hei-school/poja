@@ -22,21 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4.1.1
 
-      - name: Configure preprod AWS credentials
-        if: ${{ github.ref_name != 'prod' }}
-        uses: aws-actions/configure-aws-credentials@v4.0.1
+      - uses: hei-school/aws-credentials-setter@v1.0.2
         with:
-          aws-access-key-id: ${{ secrets.PREPROD_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PREPROD_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Configure prod AWS credentials
-        if: ${{ github.ref_name == 'prod' }}
-        uses: aws-actions/configure-aws-credentials@v4.0.1
-        with:
-          aws-access-key-id: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          secrets: ${{ toJSON(secrets) }}
+          region: ${{ env.AWS_REGION }}
 
       - name: Deploy storage database stack
         uses: aws-actions/aws-cloudformation-github-deploy@v1
