@@ -25,7 +25,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
           region: ${{ env.AWS_REGION }}
 
-      - run: sh .shell/checkHealth.sh /health/db
+      - run: sh .shell/checkHealth.sh ${{ github.ref_name }} /health/db
 
   check-async-stack:
     timeout-minutes: 300
@@ -38,7 +38,7 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
           region: ${{ env.AWS_REGION }}
 
-      - run: sh .shell/checkHealth.sh /health/event
+      - run: sh .shell/checkHealth.sh ${{ github.ref_name }} /health/event
 
   check-bucket:
     timeout-minutes: 300
@@ -51,4 +51,4 @@ jobs:
           secrets: ${{ toJSON(secrets) }}
           region: ${{ env.AWS_REGION }}
 
-      - run: sh .shell/checkHealth.sh /health/bucket
+      - run: sh .shell/checkHealth.sh ${{ github.ref_name }} /health/bucket
