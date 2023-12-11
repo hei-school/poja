@@ -1,4 +1,4 @@
-name: Infra health check (prod)
+name: Health check infra
 on:
   schedule:
     - cron: '0 8 * * *'
@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: hei-school/aws-credentials-setter@v1.0.2
+      - uses: hei-school/aws-credentials-setter@v1.0.3
         with:
           secrets: ${{ toJSON(secrets) }}
           region: ${{ env.AWS_REGION }}
@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: hei-school/aws-credentials-setter@v1.0.2
+      - uses: hei-school/aws-credentials-setter@v1.0.3
         with:
           secrets: ${{ toJSON(secrets) }}
           region: ${{ env.AWS_REGION }}
@@ -46,7 +46,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4.1.1
-      - uses: hei-school/aws-credentials-setter@v1.0.2
+      - uses: hei-school/aws-credentials-setter@v1.0.3
         with:
           secrets: ${{ toJSON(secrets) }}
           region: ${{ env.AWS_REGION }}
