@@ -36,6 +36,7 @@ Resources:
       Handler: school.hei.poja.ApiEventHandler::handleRequest
       MemorySize: <?frontal-memory>
       Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
+      <?function-fs-configs>
       Events:
         ApiCall:
           Type: Api
@@ -49,6 +50,7 @@ Resources:
       Handler: school.hei.poja.MailboxEventHandler::handleRequest
       MemorySize: <?worker-memory>
       Role: !Sub '{{resolve:ssm:/<?app-name>/${Env}/execution/role-arn}}'
+      <?function-fs-configs>
       Events:
         AllEvents:
           Type: SQS
