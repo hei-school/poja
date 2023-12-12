@@ -10,9 +10,7 @@ Globals:
     Architectures:
       - x86_64
     Timeout: 600
-    AutoPublishAlias: live
-    SnapStart:
-      ApplyOn: PublishedVersions
+    <?function-snapstart>
     <?function-vpc-config>
     Environment:
       Variables:

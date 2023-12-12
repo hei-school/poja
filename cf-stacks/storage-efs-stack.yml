@@ -16,13 +16,43 @@ Resources:
         - Key: Name
           Value: !Ref FilesystemName
 
-  FilesystemArnSSM:
+  AccessPoint:
+    Type: AWS::EFS::AccessPoint
+    Properties:
+      FileSystemId: !Ref Filesystem
+      PosixUser:
+        Uid: "1000"
+        Gid: "1000"
+      RootDirectory:
+        CreationInfo:
+          OwnerGid: "1000"
+          OwnerUid: "1000"
+          Permissions: "0777"
+        Path: "/efs"
+
+  AccessPointArnSSM:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: !Join [ '', [ /<?app-name>/, !Ref Env, /efs/arn ] ]
+      Name: !Join [ '', [ /<?app-name>/, !Ref Env, /efs/access-point/arn ] ]
       Type: String
-      Value: !GetAtt Filesystem.Arn
+      Value: !GetAtt AccessPoint.Arn
+
+  MountTarget1:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref Filesystem
+      SubnetId: !Sub '{{resolve:ssm:<?ssm-param-name-subnet1-id>}}'
+      SecurityGroups:
+        - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
+
+  MountTarget2:
+    Type: AWS::EFS::MountTarget
+    Properties:
+      FileSystemId: !Ref Filesystem
+      SubnetId: !Sub '{{resolve:ssm:<?ssm-param-name-subnet2-id>}}'
+      SecurityGroups:
+        - !Sub '{{resolve:ssm:<?ssm-param-sg-id>}}'
 
 Outputs:
-  FilesystemArnSSM:
-    Value: !GetAtt FilesystemArnSSM.Value
+  AccessPointArnSSM:
+    Value: !GetAtt AccessPointArnSSM.Value
