@@ -32,6 +32,7 @@ public class FacadeIT {
   @DynamicPropertySource
   static void configureProperties(DynamicPropertyRegistry registry) {
     POSTGRES_CONF.configureProperties(registry);
+    <?sqlite-configure-it-properties>
     new EventConf().configureProperties(registry);
     new BucketConf().configureProperties(registry);
     new EmailConf().configureProperties(registry);

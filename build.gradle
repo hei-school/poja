@@ -61,10 +61,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.flywaydb:flyway-core'
+    implementation 'com.vladmihalcea:hibernate-types-52:1.0.0'
+    testImplementation 'org.testcontainers:postgresql:1.19.1'
     implementation 'org.postgresql:postgresql'
+    implementation 'org.xerial:sqlite-jdbc:3.44.1.0'
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'com.vladmihalcea:hibernate-types-52:1.0.0'
 
     implementation 'com.amazonaws.serverless:aws-serverless-java-container-springboot2:1.9.3'
     implementation 'software.amazon.awssdk:aws-query-protocol:2.20.26'
@@ -96,8 +98,6 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.testcontainers:junit-jupiter:1.19.1'
-
-    testImplementation 'org.testcontainers:postgresql:1.19.1'
 
 <?java-deps>
 <?java-deps-springdoc>
