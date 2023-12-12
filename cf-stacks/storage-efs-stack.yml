@@ -16,13 +16,13 @@ Resources:
         - Key: Name
           Value: !Ref FilesystemName
 
-  FilesystemSSM:
+  FilesystemArnSSM:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: !Join [ '', [ /<?app-name>/, !Ref Env, /efs/id ] ]
+      Name: !Join [ '', [ /<?app-name>/, !Ref Env, /efs/arn ] ]
       Type: String
-      Value: !Ref Filesystem
+      Value: !GetAtt Filesystem.Arn
 
 Outputs:
-  DatabaseClusterSSM:
-    Value: !GetAtt FilesystemSSM.Value
+  FilesystemArnSSM:
+    Value: !GetAtt FilesystemArnSSM.Value
