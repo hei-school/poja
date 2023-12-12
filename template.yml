@@ -21,7 +21,7 @@ Globals:
         AWS_EVENTBRIDGE_BUS: !Sub '{{resolve:ssm:/<?app-name>/${Env}/eventbridge/bus-name}}'
         AWS_S3_BUCKET: !Sub '{{resolve:ssm:/<?app-name>/${Env}/s3/bucket-name}}'
         AWS_SES_SOURCE: <?aws-ses-source>
-        <?efs-env-vars>
+        <?sqlite-env-vars>
         <?postgres-env-vars>
         <?java-env-vars>
 
