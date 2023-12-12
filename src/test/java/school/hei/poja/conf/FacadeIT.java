@@ -16,22 +16,12 @@ import school.hei.poja.PojaGenerated;
 @Slf4j
 public class FacadeIT {
 
-  private static final PostgresConf POSTGRES_CONF = new PostgresConf();
-
-  @BeforeAll
-  static void beforeAll() {
-    POSTGRES_CONF.start();
-    getRuntime()
-        // Do _not_ stop postgresTest in afterAll as it is shared between multiple subclasses of
-        // FacadeTest.
-        // Doing so might cause some subclasses to stop it while other ones are still using it!
-        .addShutdownHook(new Thread(POSTGRES_CONF::stop));
-  }
+  <?postgres-start-container>
 
   @SneakyThrows
   @DynamicPropertySource
   static void configureProperties(DynamicPropertyRegistry registry) {
-    POSTGRES_CONF.configureProperties(registry);
+    <?postgres-configure-it-properties>
     <?sqlite-configure-it-properties>
     new EventConf().configureProperties(registry);
     new BucketConf().configureProperties(registry);
