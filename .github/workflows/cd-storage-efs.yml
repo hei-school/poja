@@ -1,0 +1,39 @@
+name: CD storage EFS
+
+on:
+  push:
+    branches:
+      - 'prod'
+      - 'preprod'
+
+  workflow_dispatch:
+
+jobs:
+  cd-storage:
+    if: github.ref_name == 'prod' || github.ref_name == 'preprod'
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 20
+
+    env:
+      AWS_REGION: <?aws-region>
+
+    steps:
+      - uses: actions/checkout@v4.1.1
+
+      - uses: hei-school/aws-credentials-setter@v1.0.3
+        with:
+          secrets: ${{ toJSON(secrets) }}
+          region: ${{ env.AWS_REGION }}
+
+      - name: Deploy storage database stack
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: ${{ github.ref_name }}-efs-<?app-name>
+          template: cf-stacks/storage-efs-stack.yml
+          tags: "[ { \"Key\": \"app\", \"Value\": \"<?app-name>\" }, { \"Key\": \"env\", \"Value\": \"${{ github.ref_name }}\" } ]"
+          capabilities: CAPABILITY_NAMED_IAM
+          no-fail-on-empty-changeset: "1"
+          parameter-overrides:
+            "Env=${{ github.ref_name }}"

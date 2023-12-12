@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: <?app-name> - Storage EFS
+
+Parameters:
+  Env:
+    Type: String
+  FilesystemName:
+    Type: String
+    Default: <?app-name>-efs
+
+Resources:
+  Filesystem:
+    Type: AWS::EFS::FileSystem
+    Properties:
+      FileSystemTags:
+        - Key: Name
+          Value: !Ref FilesystemName
+
+  FilesystemSSM:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: !Join [ '', [ /<?app-name>/, !Ref Env, /efs/id ] ]
+      Type: String
+      Value: !Ref Filesystem
+
+Outputs:
+  DatabaseClusterSSM:
+    Value: !GetAtt FilesystemSSM.Value
