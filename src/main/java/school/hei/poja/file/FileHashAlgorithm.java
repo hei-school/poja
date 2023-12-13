@@ -4,5 +4,5 @@ import school.hei.poja.PojaGenerated;
 
 @PojaGenerated
 public enum FileHashAlgorithm {
-  SHA256
+  SHA256, NONE
 }

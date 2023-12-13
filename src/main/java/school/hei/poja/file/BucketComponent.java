@@ -1,74 +1,92 @@
 package school.hei.poja.file;
 
-import org.springframework.stereotype.Component;
 import school.hei.poja.PojaGenerated;
-import software.amazon.awssdk.core.internal.waiters.ResponseOrException;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.model.ChecksumAlgorithm;
-import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
-import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.s3.model.PutObjectResponse;
-import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
-
 import java.io.File;
-import java.io.InputStream;
 import java.net.URL;
 import java.time.Duration;
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
+import software.amazon.awssdk.transfer.s3.model.DownloadFileRequest;
+import software.amazon.awssdk.transfer.s3.model.FileDownload;
+import software.amazon.awssdk.transfer.s3.model.UploadDirectoryRequest;
+import software.amazon.awssdk.transfer.s3.model.UploadFileRequest;
+import software.amazon.awssdk.transfer.s3.progress.LoggingTransferListener;
 
 @PojaGenerated
 @Component
+@AllArgsConstructor
 public class BucketComponent {
 
   private final BucketConf bucketConf;
-  private final FileTyper fileTyper;
-
-  public BucketComponent(BucketConf bucketConf, FileTyper fileTyper) {
-    this.bucketConf = bucketConf;
-    this.fileTyper = fileTyper;
-  }
 
   public FileHash upload(File file, String bucketKey) {
-    PutObjectRequest request =
-        PutObjectRequest.builder()
+    return file.isDirectory() ? uploadDirectory(file, bucketKey) : uploadFile(file, bucketKey);
+  }
+
+  private FileHash uploadDirectory(File file, String bucketKey) {
+    var request =
+        UploadDirectoryRequest.builder()
+            .source(file.toPath())
             .bucket(bucketConf.getBucketName())
-            .contentType(fileTyper.apply(file).toString())
-            .checksumAlgorithm(ChecksumAlgorithm.SHA256)
-            .key(bucketKey)
+            .s3Prefix(bucketKey)
             .build();
-
-    PutObjectResponse objectResponse =
-        bucketConf.getS3Client().putObject(request, RequestBody.fromFile(file));
-
-    waitUntilObjectExists(bucketKey);
-    return new FileHash(FileHashAlgorithm.SHA256, objectResponse.checksumSHA256());
+    var upload = bucketConf.getS3TransferManager().uploadDirectory(request);
+    var uploaded = upload.completionFuture().join();
+    if (!uploaded.failedTransfers().isEmpty()) {
+      throw new RuntimeException("Failed to upload following files: " + uploaded.failedTransfers());
+    }
+    return new FileHash(FileHashAlgorithm.NONE, null);
   }
 
-  private void waitUntilObjectExists(String bucketKey) {
-    ResponseOrException<HeadObjectResponse> responseOrException =
+  private FileHash uploadFile(File file, String bucketKey) {
+    var request =
+        UploadFileRequest.builder()
+            .source(file)
+            .putObjectRequest(req -> req.bucket(bucketConf.getBucketName()).key(bucketKey))
+            .addTransferListener(LoggingTransferListener.create())
+            .build();
+    var upload = bucketConf.getS3TransferManager().uploadFile(request);
+    var uploaded = upload.completionFuture().join();
+    return new FileHash(FileHashAlgorithm.SHA256, uploaded.response().checksumSHA256());
+  }
+
+  @SneakyThrows
+  public File download(String bucketKey) {
+    var destination =
+        File.createTempFile(prefixFromBucketKey(bucketKey), suffixFromBucketKey(bucketKey));
+    FileDownload download =
         bucketConf
-            .getS3Client()
-            .waiter()
-            .waitUntilObjectExists(
-                HeadObjectRequest.builder()
-                    .bucket(bucketConf.getBucketName())
-                    .key(bucketKey)
-                    .build())
-            .matched();
-    responseOrException
-        .exception()
-        .ifPresent(
-            throwable -> {
-              throw new RuntimeException(throwable);
-            });
+            .getS3TransferManager()
+            .downloadFile(
+                DownloadFileRequest.builder()
+                    .getObjectRequest(
+                        GetObjectRequest.builder()
+                            .bucket(bucketConf.getBucketName())
+                            .key(bucketKey)
+                            .build())
+                    .destination(destination)
+                    .build());
+    download.completionFuture().join();
+    return destination;
   }
 
-  public InputStream download(String bucketKey) {
-    GetObjectRequest objectRequest =
-        GetObjectRequest.builder().bucket(bucketConf.getBucketName()).key(bucketKey).build();
-    return bucketConf.getS3Client().getObjectAsBytes(objectRequest).asInputStream();
+  private String prefixFromBucketKey(String bucketKey) {
+    return lastNameSplitByDot(bucketKey)[0];
+  }
+
+  private String suffixFromBucketKey(String bucketKey) {
+    var splitByDot = lastNameSplitByDot(bucketKey);
+    return splitByDot.length == 1 ? "" : splitByDot[splitByDot.length - 1];
+  }
+
+  private String[] lastNameSplitByDot(String bucketKey) {
+    var splitByDash = bucketKey.split("/");
+    var lastName = splitByDash[splitByDash.length - 1];
+    return lastName.split("\\.");
   }
 
   public URL presign(String bucketKey, Duration expiration) {

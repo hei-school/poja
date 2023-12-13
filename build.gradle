@@ -76,6 +76,8 @@ dependencies {
     implementation 'software.amazon.awssdk:sqs:2.21.40'
     implementation 'software.amazon.awssdk:eventbridge:2.21.40'
     implementation 'software.amazon.awssdk:s3:2.21.40'
+    implementation 'software.amazon.awssdk:s3-transfer-manager:2.21.40'
+    implementation 'software.amazon.awssdk.crt:aws-crt:0.28.12'
     implementation 'software.amazon.awssdk:ses:2.21.40'
     implementation 'software.amazon.awssdk:core:2.21.40'
 
