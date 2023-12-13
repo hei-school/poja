@@ -1,5 +1,7 @@
 package school.hei.poja.file;
 
+import static java.io.File.createTempFile;
+
 import school.hei.poja.PojaGenerated;
 import java.io.File;
 import java.net.URL;
@@ -57,7 +59,7 @@ public class BucketComponent {
   @SneakyThrows
   public File download(String bucketKey) {
     var destination =
-        File.createTempFile(prefixFromBucketKey(bucketKey), suffixFromBucketKey(bucketKey));
+        createTempFile(prefixFromBucketKey(bucketKey), suffixFromBucketKey(bucketKey));
     FileDownload download =
         bucketConf
             .getS3TransferManager()
