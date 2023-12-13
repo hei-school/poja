@@ -1,20 +1,18 @@
 package school.hei.poja.endpoint.rest.controller.health;
 
+import static java.io.File.createTempFile;
+import static java.util.UUID.randomUUID;
+
 import school.hei.poja.PojaGenerated;
 import school.hei.poja.file.BucketComponent;
-import lombok.AllArgsConstructor;
-import lombok.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Optional;
-
-import static java.io.File.createTempFile;
-import static java.util.UUID.randomUUID;
+import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @PojaGenerated
 @RestController
