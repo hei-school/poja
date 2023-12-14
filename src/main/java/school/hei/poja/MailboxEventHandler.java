@@ -8,9 +8,7 @@ import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import school.hei.poja.endpoint.event.EventConf;
 import school.hei.poja.endpoint.event.EventConsumer;
-import software.amazon.awssdk.services.sqs.SqsClient;
 
 @Slf4j
 @PojaGenerated
@@ -26,10 +24,10 @@ public class MailboxEventHandler implements RequestHandler<SQSEvent, String> {
 
     ConfigurableApplicationContext applicationContext = applicationContext();
     EventConsumer eventConsumer = applicationContext.getBean(EventConsumer.class);
-    EventConf eventConf = applicationContext.getBean(EventConf.class);
-    SqsClient sqsClient = applicationContext.getBean(SqsClient.class);
+    EventConsumer.SqsMessageAckTyper messageConverter =
+        applicationContext.getBean(EventConsumer.SqsMessageAckTyper.class);
 
-    eventConsumer.accept(EventConsumer.toAcknowledgeableEvent(eventConf, sqsClient, messages));
+    eventConsumer.accept(messageConverter.toAcknowledgeableEvent(messages));
 
     applicationContext.close();
     return "ok";
