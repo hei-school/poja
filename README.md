@@ -8,7 +8,7 @@ POJA enforces a specific style for running Spring Boot on AWS.
 
 In particular, the whole stack is fully serverless: no activity then no payment.
 Spring Boot itself is run on Lambda functions, with no cold start problem thanks to SnapStart.
-The persistence is backed by Aurora Postgres v1, with no cold start problem -- if needed -- by maintaining it constantly hot through properly defined configuration variable.
+The persistence is backed by Aurora Postgres v1 or SQLite (on EFS).
 An asynchronous stack is also embedded using EventBrige and SQS.
 
 Additionally, POJA generates Github Actions for CI/CD, for health check, for formatting, for releases and for periodic database snapshoting.
