@@ -7,7 +7,7 @@ In the same way Spring Boot enforces a specific style for writing Java applicati
 POJA enforces a specific style for running Spring Boot on AWS.
 
 In particular, the whole stack is fully serverless: no activity then no payment.
-Spring Boot itself is run on Lambda functions, with no cold start problem thanks to SnapStart.
+Spring Boot itself is run on Lambda functions.
 The persistence is backed by Aurora Postgres v1 or SQLite (on EFS).
 An asynchronous stack is also embedded using EventBrige and SQS.
 
