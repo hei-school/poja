@@ -22,6 +22,7 @@ Globals:
         <?sqlite-env-vars>
         <?postgres-env-vars>
         <?java-env-vars>
+        <?function-snapstart-java-env-vars>
 
 Parameters:
   Env:
